@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1080</width>
+    <height>787</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="reset">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>320</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reset</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="save">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>370</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>40</y>
+      <width>701</width>
+      <height>194</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>music</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGraphicsView" name="spect_view"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>260</y>
+      <width>701</width>
+      <height>194</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>vocal</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGraphicsView" name="graphicsView"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>460</y>
+      <width>701</width>
+      <height>194</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>song</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGraphicsView" name="spect_view_7"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1080</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menufile">
+    <property name="title">
+     <string>song</string>
+    </property>
+    <addaction name="actionbrowse"/>
+    <addaction name="actionnew"/>
+   </widget>
+   <widget class="QMenu" name="menuLyrics">
+    <property name="title">
+     <string>Lyrics </string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuArtist">
+    <property name="title">
+     <string>Artist</string>
+    </property>
+   </widget>
+   <addaction name="menufile"/>
+   <addaction name="menuLyrics"/>
+   <addaction name="menuArtist"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionbrowse">
+   <property name="text">
+    <string>open</string>
+   </property>
+  </action>
+  <action name="actionnew">
+   <property name="text">
+    <string>new</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
