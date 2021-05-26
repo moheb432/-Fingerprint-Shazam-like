@@ -70,21 +70,23 @@ class Ui_mainwindow(object):
         self.menufile.setTitle(_translate("MainWindow", "file"))
         
     def get_feat(self,data,color,rate):
-        return[lib.feature.melspectrogram(y=data,sr=rate,S=color),
-               lib.feature.mfcc(y=data.astype('float64'),sr=rate),
+        return[lib.feature.mfcc(y=data.astype('float64'),sr=rate),
+               lib.feature.melspectrogram(y=data,sr=rate,S=color),
                lib.feature.chroma_stft(y=data,sr=rate,S=color)]
     
     def PerHash(self,array):
         dataInstance = Image.fromarray(array)
         P_HASH= imagehash.phash(dataInstance, hash_size=16).__str__()
+        # print(P_HASH)
         return P_HASH
 
     def read(self):
         load_file = QtWidgets.QFileDialog.getOpenFileName(None, "Load Audio File %s",filter="*.mp3")
         path=load_file[0]
-        audiofile = AudioSegment.from_mp3(path)
+        audiofile = AudioSegment.from_mp3(path)[:60000] 
         self.data = np.array(audiofile.get_array_of_samples())
         self.rate = audiofile.frame_rate
+        print(self.data)
         self.spect()    
         self.compare()
         
