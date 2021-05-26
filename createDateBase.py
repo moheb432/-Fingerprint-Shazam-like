@@ -23,7 +23,7 @@ spect_hash_list=[]
 mfccHashList = []
 melSpectroHashList=[]
 chromaHashList=[]
-
+print(os.listdir())
    
 for filename in os.listdir():
     if filename.endswith(".mp3"):
@@ -34,24 +34,24 @@ for filename in os.listdir():
         wavsong,samplingFrequency =librosa.load(wname)
 
 
-        sampleFreqs,sampleTime, colorMesh =signal.spectrogram(wavsong[:][0],fs=samplingFrequency)
+        # sampleFreqs,sampleTime, colorMesh =signal.spectrogram(wavsong[:][0],fs=samplingFrequency)
         feature1= librosa.feature.mfcc(y=wavsong, sr=samplingFrequency)
         feature2= librosa.feature.melspectrogram(y=wavsong, sr=samplingFrequency)
         feature3= librosa.feature.chroma_stft(y=wavsong, sr=samplingFrequency)
 
-        spect_image=Image.fromarray(colorMesh)
+        # spect_image=Image.fromarray(colorMesh)
         new_image = Image.fromarray(feature1)
         new_image2=Image.fromarray(feature2)
         new_image3=Image.fromarray(feature3)
 
-        spectHash=imagehash.phash(spect_image)
+        # spectHash=imagehash.phash(spect_image)
         firstHash=imagehash.phash(new_image)
         secondHash=imagehash.phash(new_image2)
         thirdHash=imagehash.phash(new_image3)
 
         Song.append(filename)
 
-        spect_hash_list.append(spectHash)
+        # spect_hash_list.append(spectHash)
         mfccHashList.append(firstHash)
         melSpectroHashList.append(secondHash)
         chromaHashList.append(thirdHash)
@@ -59,7 +59,9 @@ for filename in os.listdir():
 
 
 
-dict = {'song': Song, 'spectrogram hash':spect_hash_list,'mfcc hash': mfccHashList,'mel spectrogram hash':melSpectroHashList,'Chroma_stft hash':chromaHashList}
+# dict = {'song': Song, 'spectrogram hash':spect_hash_list,'mfcc hash': mfccHashList,'mel spectrogram hash':melSpectroHashList,'Chroma_stft hash':chromaHashList}
+dict = {'song': Song,'mfcc hash': mfccHashList,'mel spectrogram hash':melSpectroHashList,'Chroma_stft hash':chromaHashList}
+
 df = pd.DataFrame(dict)
 print(df.head)
 df.to_csv('songsDataBase5.csv',index=False)
