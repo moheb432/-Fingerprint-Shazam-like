@@ -10,6 +10,8 @@ import librosa as lib
 from scipy import signal
 import pandas as pd
 import matplotlib.pyplot as plt
+from similarity import *
+
 class Ui_mainwindow(object):
     
     def setupUi(self, MainWindow):
@@ -54,9 +56,10 @@ class Ui_mainwindow(object):
 
 
         self.save.clicked.connect(lambda:self.read())
-        self.test_feat_hash=[]
-        music= pd.read_excel('musics.Xlsx')
-        self.musics = music[:].values         
+        self.hashes=[]
+        music= pd.read_excel('songsDataBase5.xlsx')
+        self.DataB_songs = music[:].values    
+        print(len(self.DataB_songs))     
 ####################moheb########################################3
         
 
@@ -68,8 +71,8 @@ class Ui_mainwindow(object):
         self.reset.setText(_translate("MainWindow", "Reset"))
         self.save.setText(_translate("MainWindow", "Save"))
         self.menufile.setTitle(_translate("MainWindow", "file"))
-        
-    def get_feat(self,data,color,rate):
+
+    def get_features(self,data,color,rate):
         return[lib.feature.mfcc(y=data.astype('float64'),sr=rate),
                lib.feature.melspectrogram(y=data,sr=rate,S=color),
                lib.feature.chroma_stft(y=data,sr=rate,S=color)]
@@ -77,7 +80,7 @@ class Ui_mainwindow(object):
     def PerHash(self,array):
         dataInstance = Image.fromarray(array)
         P_HASH= imagehash.phash(dataInstance, hash_size=16).__str__()
-        # print(P_HASH)
+        
         return P_HASH
 
     def read(self):
@@ -93,16 +96,18 @@ class Ui_mainwindow(object):
     def spect(self):
             sampleFreqs,sampleTime, colorMesh = signal.spectrogram(self.data,fs=self.rate)
             self.test_spect_hash=self.PerHash(colorMesh)
+            self.hashes.append(self.test_spect_hash)
+            for fet in self.get_features(self.data,colorMesh,self.rate):
+                self.hashes.append(self.PerHash(fet))
             
-            for fet in self.get_feat(self.data,colorMesh,self.rate):
-                self.test_feat_hash.append(self.PerHash(fet))
-    
+            print(self.hashes)
     def compare(self):
-        
+        self.all_similarity_index = similarity(self.DataB_songs,self.hashes)
         self.ui_table()
-    def ui_table(self):
-        
+
+    def ui_table(self): 
         pass
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
