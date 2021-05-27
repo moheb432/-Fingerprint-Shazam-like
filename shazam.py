@@ -10,7 +10,7 @@ import librosa as lib
 from scipy import signal
 import pandas as pd
 import matplotlib.pyplot as plt
-from similarity import *
+from sim_index import similarity
 
 class Ui_mainwindow(object):
     
@@ -52,14 +52,30 @@ class Ui_mainwindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.menubar.addAction(self.menufile.menuAction())
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.slider1 = QtWidgets.QSlider(self.widget)
+        self.slider1.setSliderPosition(40)
+        self.slider1.setOrientation(QtCore.Qt.Vertical)
+        self.slider1.setObjectName("slider1")
+        self.slider1.setMaximum(100)
+        self.slider1.setMinimum(0)
+        
+        
+        self.horizontalLayout.addWidget(self.slider1)
 ####################################################################
-
-
-        self.save.clicked.connect(lambda:self.read())
+        
+        self.reset.clicked.connect(lambda:self.read(2))
+        self.save.clicked.connect(lambda:self.read(1))
         self.hashes=[]
-        music= pd.read_excel('songsDataBase5.xlsx')
+        self.mixer=[]
+        self.slider1.hide()
+        music= pd.read_csv('songsDataBase6.csv')
         self.DataB_songs = music[:].values    
-        print(len(self.DataB_songs))     
+        self.musics_names=[]
+        for i in range(0,len(self.DataB_songs)):
+            self.musics_names.append([self.DataB_songs[i][0]])   
+        # self.slider1.sliderReleased(self.func_mixer())
+        
 ####################moheb########################################3
         
 
@@ -83,15 +99,20 @@ class Ui_mainwindow(object):
         
         return P_HASH
 
-    def read(self):
+    def read(self,temp):
         load_file = QtWidgets.QFileDialog.getOpenFileName(None, "Load Audio File %s",filter="*.mp3")
         path=load_file[0]
         audiofile = AudioSegment.from_mp3(path)[:60000] 
         self.data = np.array(audiofile.get_array_of_samples())
         self.rate = audiofile.frame_rate
-        print(self.data)
-        self.spect()    
-        self.compare()
+        self.mixer.append(self.data)
+        self.mixer.append(self.rate)
+        if temp==1:
+            self.spect()    
+            self.compare()
+        if temp==2:
+            self.slider1.show()
+            pass
         
     def spect(self):
             sampleFreqs,sampleTime, colorMesh = signal.spectrogram(self.data,fs=self.rate)
@@ -100,13 +121,21 @@ class Ui_mainwindow(object):
             for fet in self.get_features(self.data,colorMesh,self.rate):
                 self.hashes.append(self.PerHash(fet))
             
-            print(self.hashes)
     def compare(self):
-        self.all_similarity_index = similarity(self.DataB_songs,self.hashes)
+        all_similarity_index = similarity(self.DataB_songs,self.hashes)
+        for i in range(0,len(self.musics_names)):     
+                       self.musics_names[i].append(all_similarity_index[i])
+        
+        print(self.musics_names)    
         self.ui_table()
-
+    def func_mixer(self):
+        
+        print(self.mixer)
+    
     def ui_table(self): 
+    
         pass
+    
 
 if __name__ == "__main__":
     import sys
