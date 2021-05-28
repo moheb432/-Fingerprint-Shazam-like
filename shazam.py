@@ -1,16 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.uic import loadUiType
 import pyqtgraph as pg
-import numpy as np
-from pydub import AudioSegment
-import imagehash
-from imagehash import hex_to_hash
-from PIL import Image
-import librosa as lib
-from scipy import signal
+from perceptial_hash import per_spec_hashs,mix
 import pandas as pd
 import matplotlib.pyplot as plt
 from sim_index import similarity
+import numpy as np
+from pydub import AudioSegment
+from scipy import signal
 
 class Ui_mainwindow(object):
     
@@ -64,22 +61,19 @@ class Ui_mainwindow(object):
         self.horizontalLayout.addWidget(self.slider1)
 ####################################################################
         
-        self.reset.clicked.connect(lambda:self.read(2))
         self.save.clicked.connect(lambda:self.read(1))
+        self.reset.clicked.connect(lambda:self.read(2))
+        self.slider1.sliderReleased.connect(lambda:self.func_mixer())
         self.hashes=[]
         self.mixer=[]
         self.slider1.hide()
-        music= pd.read_csv('songsDataBase6.csv')
+        music= pd.read_csv('musics.csv')
         self.DataB_songs = music[:].values    
         self.musics_names=[]
         for i in range(0,len(self.DataB_songs)):
             self.musics_names.append([self.DataB_songs[i][0]])   
-        # self.slider1.sliderReleased(self.func_mixer())
         
 ####################moheb########################################3
-        
-
-
         
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -88,17 +82,6 @@ class Ui_mainwindow(object):
         self.save.setText(_translate("MainWindow", "Save"))
         self.menufile.setTitle(_translate("MainWindow", "file"))
 
-    def get_features(self,data,color,rate):
-        return[lib.feature.mfcc(y=data.astype('float64'),sr=rate),
-               lib.feature.melspectrogram(y=data,sr=rate,S=color),
-               lib.feature.chroma_stft(y=data,sr=rate,S=color)]
-    
-    def PerHash(self,array):
-        dataInstance = Image.fromarray(array)
-        P_HASH= imagehash.phash(dataInstance, hash_size=16).__str__()
-        
-        return P_HASH
-
     def read(self,temp):
         load_file = QtWidgets.QFileDialog.getOpenFileName(None, "Load Audio File %s",filter="*.mp3")
         path=load_file[0]
@@ -106,34 +89,31 @@ class Ui_mainwindow(object):
         self.data = np.array(audiofile.get_array_of_samples())
         self.rate = audiofile.frame_rate
         self.mixer.append(self.data)
-        self.mixer.append(self.rate)
         if temp==1:
-            self.spect()    
-            self.compare()
+            hashes=per_spec_hashs(self.data,self.rate)    
+            self.compare(hashes)
         if temp==2:
             self.slider1.show()
             pass
         
-    def spect(self):
-            sampleFreqs,sampleTime, colorMesh = signal.spectrogram(self.data,fs=self.rate)
-            self.test_spect_hash=self.PerHash(colorMesh)
-            self.hashes.append(self.test_spect_hash)
-            for fet in self.get_features(self.data,colorMesh,self.rate):
-                self.hashes.append(self.PerHash(fet))
+    def compare(self,hashes):
+        print(hashes)
+        similarity_index = similarity(self.DataB_songs,hashes)
+        print(similarity_index)
+        self.musics=[]
             
-    def compare(self):
-        all_similarity_index = similarity(self.DataB_songs,self.hashes)
-        for i in range(0,len(self.musics_names)):     
-                       self.musics_names[i].append(all_similarity_index[i])
-        
-        print(self.musics_names)    
+        for i in range(0,len(self.musics_names)):
+                self.musics.append([self.musics_names[i][0],similarity_index[i]])
+        # print(self.musics)
         self.ui_table()
-    def func_mixer(self):
         
-        print(self.mixer)
-    
+    def func_mixer(self):
+        data = mix(self.mixer[0] ,self.mixer[1][0:len(self.mixer[0])],self.slider1.value()/100)
+        hashes=per_spec_hashs(data,self.rate)
+        
+        self.compare(hashes)
+   
     def ui_table(self): 
-    
         pass
     
 
