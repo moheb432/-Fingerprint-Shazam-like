@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>629</width>
+    <width>964</width>
     <height>770</height>
    </rect>
   </property>
@@ -1166,30 +1166,13 @@ QStatusBar
       </property>
      </widget>
     </item>
-    <item row="7" column="1">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0" colspan="3">
-     <widget class="QTableWidget" name="resultsTable"/>
-    </item>
-    <item row="5" column="0">
+    <item row="6" column="0">
      <widget class="QSlider" name="mix_slider">
       <property name="maximum">
        <number>100</number>
       </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1" colspan="2">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>0</string>
       </property>
      </widget>
     </item>
@@ -1200,10 +1183,34 @@ QStatusBar
       </property>
      </widget>
     </item>
+    <item row="6" column="1" colspan="2">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>0</string>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="1" colspan="2">
      <widget class="QPushButton" name="loadmusic2">
       <property name="text">
        <string>LoadMusic2</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="3">
+     <widget class="QTableWidget" name="resultsTable"/>
+    </item>
+    <item row="2" column="1" colspan="2">
+     <widget class="QPushButton" name="reset">
+      <property name="text">
+       <string>reset</string>
       </property>
      </widget>
     </item>
