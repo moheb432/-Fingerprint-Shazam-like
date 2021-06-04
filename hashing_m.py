@@ -10,7 +10,11 @@ def get_features(data,color,rate):
    return[lib.feature.mfcc(y=data.astype('float64'),sr=rate),
   lib.feature.melspectrogram(y=data,sr=rate,S=color),
   lib.feature.chroma_stft(y=data,sr=rate,S=color)]
-   
+   """
+       mfcc:MFCC coefficients are used to represent the shape of the spectrum.
+       chroma:Compute a chromagram from a waveform or power spectrogram.
+       melspectrogram:
+   """
 
 
 
@@ -35,7 +39,6 @@ def per_spec_hashs(data,rate):
 #     return (per*song1 + (1.0-per)*song2)
 
 def mix(song1: np.ndarray, song2: np.ndarray,w) -> np.ndarray:
-   
     return (w*song1 + (1.0-w)*song2)
 
     
