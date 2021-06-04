@@ -6,12 +6,12 @@ from imagehash import hex_to_hash
   
 def similarity(songs: list,feature_hash: list):
     
-    hammingDifferences  = []       # List contains the hamming distance of spectrogram hashes of all the songs and the mix
-    feature1Differences = []       # List contains the hamming distance of feature 1 hashes of all the songs and the mix
-    feature2Differences = []       # List contains the hamming distance of feature 2 hashes of all the songs and the mix
-    feature3Differences = []       # List contains the hamming distance of feature 3 hashes of all the songs and the mix
+    hammingDifferences  = []      
+    feature1Differences = []   
+    feature2Differences = []       
+    feature3Differences = []       
     differences_list =[hammingDifferences,feature1Differences,feature2Differences,feature3Differences]
-    avgSimilaritiesAll  = []        # List contains the similarity percentage of all the songs and the mix (Using average hash of Spectrogram and all the features)
+    avgSimilaritiesAll  = []        
 
     
     for i in range(len(songs)):
@@ -19,7 +19,6 @@ def similarity(songs: list,feature_hash: list):
         for j in range(len(differences_list)):
             differences_list[j].append(getHammingDistance(hash1=songs[i][j+1], hash2=feature_hash[j]))
         
-        for j in range(len(differences_list)):
             sum =sum + differences_list[j][i]
         avg=sum/4
         avgMap = mapRanges(avg, 0, 255, 0, 1)  
