@@ -47,7 +47,6 @@ class MainApp(QtWidgets.QMainWindow,FORM_CLASS):
     
     def handle_UI(self):
          _translate = QtCore.QCoreApplication.translate
-         #self.horizontalLayout.addWidget(self.mixer)
          self.loadmusic1.clicked.connect(lambda:self.music_load(1))
          self.loadmusic2.clicked.connect(lambda:self.music_load(2))
          self.mix_slider.sliderReleased.connect(lambda:self.func_mixer())
@@ -62,10 +61,8 @@ class MainApp(QtWidgets.QMainWindow,FORM_CLASS):
          self.DataB_songs = music[:].values    
          self.musics_names=[]
          for i in range(0,len(self.DataB_songs)):
-            self.musics_names.append([self.DataB_songs[i][0]])   
-        
-        
-        
+            self.musics_names.append([self.DataB_songs[i][0]])
+         self.reset.clicked.connect(lambda:self.reseT())   
         
         
         
@@ -74,7 +71,7 @@ class MainApp(QtWidgets.QMainWindow,FORM_CLASS):
         load_file = QtWidgets.QFileDialog.getOpenFileName(None, "Load Audio File %s",filter="*.mp3")
         path=load_file[0]
         audiofile = AudioSegment.from_mp3(path)[:60000] 
-        self.data = np.array(audiofile.get_array_of_samples())
+        self.data = np.array(audiofile.get_array_of_samples())[0:5000000]
         self.rate = audiofile.frame_rate
         self.mixer.append(self.data)
         if action==1:
@@ -100,12 +97,14 @@ class MainApp(QtWidgets.QMainWindow,FORM_CLASS):
         
         
     def func_mixer(self):
-        data = mix(self.mixer[0] ,self.mixer[1][0:len(self.mixer[0])],self.mix_slider.value()/100)
+        data = mix(self.mixer[0] ,self.mixer[1],self.mix_slider.value()/100)
         hashes=per_spec_hashs(data,self.rate)
-        
         self.compare(hashes)
-        
-        
+    
+    def reseT(self):
+          self.resultsTable.hide()
+          self.resultsTable.clear()
+          self.mixer.clear()
     def ui_table(self): 
         # pass
         self.resultsTable.setColumnCount(2)
